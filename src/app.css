@@ -1,0 +1,91 @@
+body {
+    background: #5D6D7E;
+    color: #fff;
+    background-image: url('./img/task.svg');
+    background-size: 35%;
+    background-repeat: no-repeat;
+    background-position: 5% 80%;
+    background-attachment: fixed;
+}
+
+form {
+    padding: 0px !important;
+}
+
+.container {
+    margin-top: 15px;
+}
+
+.new-task-controller {
+    width: 100%;
+    background: #fff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.new-task-controller div, .task div {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 5px;
+}
+.new-task-controller input, .task input {
+    width: 100%;
+}
+
+.task {
+    opacity: 85%;
+    padding: 0 15px;
+    margin-top: 15px;
+    width: 100%;
+    background: #fff;
+    z-index: 15;
+}
+.task button {
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+.task .select-task {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+.task .select-task span {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+.task .select-task:focus {
+    outline: none;
+}
+.task .remove-task, .task .select-task {
+    opacity: 35%;
+}
+
+/* Completed Task */
+article[type='completedTask'] input{
+    text-decoration-line: line-through;
+}
+
+#controller {
+    margin-top: 15px;
+    padding: 10px;
+    background: #fff;
+    color: black;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+#controller div {
+    display: inline-block;
+    margin: 5px;
+}
+
+#filters button {
+    margin: 5px;
+}
+
+
+
+.notShow {
+    display: none;
+}
