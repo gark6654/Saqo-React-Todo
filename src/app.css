@@ -85,6 +85,12 @@ article[type='completedTask'] input{
 }
 
 
+.hovered-task button {
+    opacity: 100% !important;
+}
+.noneHovered-task button {
+    opacity: 35% !important;
+}
 
 .notShow {
     display: none;
