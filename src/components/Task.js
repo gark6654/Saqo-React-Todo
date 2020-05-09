@@ -8,12 +8,22 @@ class Task extends React.Component {
             value: '',
             completed: '',
             type: '',
-            hover: false
+            // UI
+            hover: false,
+            readOnly: true
         };
     }
 
     componentDidMount() {
         this.updateStates();
+    }
+
+    componentWillUnmount() {
+        this.updateStates();
+        this.setState({
+            readOnly: true
+        });
+        console.log(this.state);
     }
 
     componentDidUpdate(nextProps) {
@@ -31,13 +41,13 @@ class Task extends React.Component {
             id: this.props.id,
             value: this.props.value,
             completed: this.props.completed,
-            type: (this.props.completed === true) ? 'completedTask' : 'activeTask',
-            hover: false
+            type: (this.props.completed === true) ? 'completedTask' : 'activeTask'
         });
     }
 
-    // Functions under this line works only for style or view
-    
+    // ============================================================
+    // Functions under this line works only for style or UI
+   
     // Mouse hover from task
     mouseEnter() {
         this.setState({
@@ -52,6 +62,23 @@ class Task extends React.Component {
         });
     }
 
+    // Setup input readonly false on dbClick
+    doubleClick() {
+        this.setState({
+            readOnly: false
+        });
+    }
+
+    // Setup input readonly true on focusout
+    focusOut() {
+        this.setState({
+            readOnly: true
+        });
+    }
+
+    // =========================.END.===============================
+    // End of style or UI functions 
+
     render() {
         return(
             <article id={this.state.id} className={(this.state.hover === true) ? 'task col-md-10 hovered-task' : 'task col-md-10 noneHovered-task'} type={this.state.type} onMouseEnter={this.mouseEnter.bind(this)} onMouseLeave={this.mouseLeave.bind(this)}>
@@ -63,7 +90,7 @@ class Task extends React.Component {
                     </button>
                 </div>
                 <div>
-                    <input type="text" id={this.state.id} value={this.state.value} className="form-control" readOnly onChange={() => {this.props.updateTaskValue(this.state.id)}} />
+                    <input type="text" id={this.state.id} value={this.state.value} className="form-control" readOnly={this.state.readOnly} onChange={() => {this.props.updateTaskValue(this.state.id)}} onBlur={() => {this.focusOut()}} onDoubleClick={() => {this.doubleClick()}}  />
                 </div>
                 <div>
                     <button className="remove-task" id={this.state.id} onClick={() => {this.props.removeTask(this.state.id)}}>

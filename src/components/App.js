@@ -11,7 +11,7 @@ class App extends React.Component {
             tasks: [],
         };
     }
-     
+
     componentDidMount() {
         if (localStorage.getItem('tasks') !== null) {
             this.setState({
@@ -31,8 +31,8 @@ class App extends React.Component {
     // Filtrates tasks 
     filtrateTasks(filter) {
         for (let i in this.state.tasks) {
-            if ($('.task[id="' + i +'"]').hasClass('notShow')) {
-                $('.task[id="' + i +'"]').removeClass('notShow');
+            if ($('.task[id="' + i + '"]').hasClass('notShow')) {
+                $('.task[id="' + i + '"]').removeClass('notShow');
             }
         }
 
@@ -118,7 +118,7 @@ class App extends React.Component {
         let stateTasks = this.state.tasks;;
 
         stateTasks[id].value = value;
-
+        
         this.setState({
             tasks: stateTasks
         })
@@ -128,8 +128,9 @@ class App extends React.Component {
                 if (input.val() === '') {
                     this.removeTask(id);
                 }
-            }, 1000);   
+            }, 1000);
         }
+
         this.saveToStorage();
     }
 
