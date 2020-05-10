@@ -23,7 +23,6 @@ class Task extends React.Component {
         this.setState({
             readOnly: true
         });
-        console.log(this.state);
     }
 
     componentDidUpdate(nextProps) {
@@ -43,6 +42,11 @@ class Task extends React.Component {
             completed: this.props.completed,
             type: (this.props.completed === true) ? 'completedTask' : 'activeTask'
         });
+    }
+    
+    // On input value change
+    onChange(event) {
+        this.props.updateTaskValue(this.state.id, event.target)
     }
 
     // ============================================================
@@ -81,7 +85,9 @@ class Task extends React.Component {
 
     render() {
         return(
-            <article id={this.state.id} className={(this.state.hover === true) ? 'task col-md-10 hovered-task' : 'task col-md-10 noneHovered-task'} type={this.state.type} onMouseEnter={this.mouseEnter.bind(this)} onMouseLeave={this.mouseLeave.bind(this)}>
+            <article id={this.state.id} 
+            className={(this.state.hover === true) ? 'task col-md-10 hovered-task' : 'task col-md-10 noneHovered-task'} 
+            type={this.state.type} onMouseEnter={this.mouseEnter.bind(this)} onMouseLeave={this.mouseLeave.bind(this)}>
                 <div>
                     <button className="select-task" id={this.state.id} onClick={() => {this.props.completeTask(this.state.id)}}>
                         <span>
@@ -90,7 +96,11 @@ class Task extends React.Component {
                     </button>
                 </div>
                 <div>
-                    <input type="text" id={this.state.id} value={this.state.value} className="form-control" readOnly={this.state.readOnly} onChange={() => {this.props.updateTaskValue(this.state.id)}} onBlur={() => {this.focusOut()}} onDoubleClick={() => {this.doubleClick()}}  />
+                    <input type="text" id={this.state.id} value={this.state.value} className="form-control" readOnly={this.state.readOnly} 
+                    // Input functions 
+                    onChange={this.onChange.bind(this)} 
+                    onBlur={() => {this.focusOut()}} 
+                    onDoubleClick={() => {this.doubleClick()}}  />
                 </div>
                 <div>
                     <button className="remove-task" id={this.state.id} onClick={() => {this.props.removeTask(this.state.id)}}>

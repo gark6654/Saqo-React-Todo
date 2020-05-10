@@ -84,14 +84,9 @@ article[type='completedTask'] input{
     margin: 5px;
 }
 
-
 .hovered-task button {
     opacity: 100% !important;
 }
 .noneHovered-task button {
     opacity: 35% !important;
-}
-
-.notShow {
-    display: none;
 }
