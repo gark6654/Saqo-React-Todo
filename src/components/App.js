@@ -17,7 +17,7 @@ class App extends React.Component {
             this.setState({
                 tasks: JSON.parse(localStorage.getItem('tasks'))
             });
-        }
+        } 
         else {
             localStorage.setItem('tasks', JSON.stringify('[]'));
         }
@@ -45,25 +45,18 @@ class App extends React.Component {
     }
 
     // Create new task
-    createNewTask(event) {
-        event.preventDefault(); // Return false
-
-        // Task info
-        const input = $('.new-task-controller input');
-        const completed = false;
-
-        if (input.val() !== '') {
+    createNewTask(value) {
+        if (value !== '') {
             let state = this.state.tasks;
             state.push({
-                value: input.val(),
-                completed: completed
+                value: value,
+                completed: false
             });
 
             this.setState({
                 tasks: state
             });
 
-            input.val('');
             this.saveToStorage();
         }
     }
@@ -118,7 +111,7 @@ class App extends React.Component {
         let stateTasks = this.state.tasks;;
 
         stateTasks[id].value = value;
-        
+
         this.setState({
             tasks: stateTasks
         })
