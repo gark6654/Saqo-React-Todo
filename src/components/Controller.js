@@ -4,7 +4,6 @@ function Controller(props) {
     const [count, setCount] = useState(0);
     const [completedCount, setCompletedCount] = useState(0);
 
-
     useEffect(() => {
         setCount(props.count);
         setCompletedCount(props.completedCount);
@@ -38,6 +37,5 @@ function Controller(props) {
         </article>
     );
 }
-
 
 export default Controller;

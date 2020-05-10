@@ -9,11 +9,9 @@ function Task(props) {
     const [hover, setHover] = useState(props.hover);
     const [readOnly, setReadOnly] = useState(props.readOnly);
 
-    useEffect((nextProps) => {
-        if (props !== nextProps) {
-            updateStates();
-        }
-    });
+    useEffect(() => {
+        updateStates();
+    }, [props]);
 
     function updateStates() {
         setId(props.id);
@@ -45,8 +43,8 @@ function Task(props) {
     return (
         <article
             className={`task col-md-10 ${type} ${(hover) ? 'hovered-task' : 'noneHovered-task'}`}
-            onMouseEnter={ mouseEnter }
-            onMouseLeave={ mouseLeave }
+            onMouseEnter={mouseEnter}
+            onMouseLeave={mouseLeave}
         >
             <div>
                 <button className="select-task" onClick={() => { props.completeTask(id) }}>
@@ -56,11 +54,11 @@ function Task(props) {
                 </button>
             </div>
             <div>
-                <input type="text" value={value} className="form-control" readOnly={ readOnly }
+                <input type="text" value={value} className="form-control" readOnly={readOnly}
                     // Input functions 
-                    onChange={ onChange }
-                    onBlur={ focusOut }
-                    onDoubleClick={ doubleClick } 
+                    onChange={onChange}
+                    onBlur={focusOut}
+                    onDoubleClick={doubleClick}
                 />
             </div>
             <div>
