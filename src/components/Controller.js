@@ -1,48 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-class Controller extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            count: 0,
-            completedCount: 0
-        }
-    };
+function Controller(props) {
+    const [count, setCount] = useState(0);
+    const [completedCount, setCompletedCount] = useState(0);
 
-    componentDidMount() {
-        this.setState({
-            count: this.props.count,
-            completedCount: this.props.completedCount
-        });
-    }
 
-    componentDidUpdate(nextProps) {
-        if (this.props !== nextProps) {
-            this.setState({
-                count: this.props.count,
-                completedCount: this.props.completedCount
-            });
-        }
-    }
+    useEffect(() => {
+        setCount(props.count);
+        setCompletedCount(props.completedCount);
+    }, [props]);
 
-    render() {
-        return(
+    return (
+        <article>
             <article className="col-md-10" id="controller">
                 <div>
                     <h6>
-                        Task Count: <b>{this.state.count}</b>
+                        Task Count: <b>{count}</b>
                     </h6>
                 </div>
                 <div id="filters">
                     <span>Filters:</span>
-                    <button className="btn btn-warning" onClick={() => {this.props.filtrate('All')}}>All</button>
-                    <button className="btn btn-success" onClick={() => {this.props.filtrate('Completed')}}>Completed</button>
-                    <button className="btn btn-danger" onClick={() => {this.props.filtrate('Active')}}>Active</button>
-                    {(this.state.completedCount !== 0) && <button className="btn" onClick={() => {this.props.removeCompleteds()}}>Clear All Completeds</button>}
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => {props.filtrate('All')}}>All
+                    </button>
+                    <button
+                        className="btn btn-success"
+                        onClick={() => {props.filtrate('Completed')}}>Completed
+                    </button>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {props.filtrate('Active')}}>Active
+                    </button>
+                    {(completedCount !== 0) && <button className="btn" onClick={() => {props.removeCompleteds()}}>Clear All Completeds</button>}
                 </div>
             </article>
-        );
-    };
+        </article>
+    );
 }
+
 
 export default Controller;
