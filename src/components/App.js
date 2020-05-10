@@ -75,12 +75,7 @@ class App extends React.Component {
     // Complete task by button Click
     completeTask(id) {
         let stateTasks = this.state.tasks;
-        if (stateTasks[id].completed === true) {
-            stateTasks[id].completed = false;
-        }
-        else {
-            stateTasks[id].completed = true;
-        }
+        stateTasks[id].completed = !stateTasks[id].completed;
 
         this.setState({
             tasks: stateTasks
@@ -91,7 +86,7 @@ class App extends React.Component {
     // Change task value 
     updateTaskValue(id, input) {
         const value = input.value;
-        let stateTasks = this.state.tasks;;
+        let stateTasks = this.state.tasks;
 
         stateTasks[id].value = value;
 
@@ -114,10 +109,10 @@ class App extends React.Component {
     getCompletedsCount() {
         let count = 0;
         for (let i in this.state.tasks) {
-            if (this.state.tasks[i].completed === true) {
+            if (this.state.tasks[i].completed) {
                 count++;
             }
-        };
+        }
         return count;
     }
 
@@ -130,48 +125,49 @@ class App extends React.Component {
 
     // Get Tasks after filtrate
     getFIltratedTasks() {
-        let tasks = [];
         const stateTasks = this.state.tasks;
         const filter = this.state.filter;
 
         if (filter === 'All') {
-            for (let i in stateTasks) {
-                tasks.push(<Task key={i} id={i} value={stateTasks[i].value} completed={stateTasks[i].completed} removeTask={this.removeTask.bind(this)} completeTask={this.completeTask.bind(this)} updateTaskValue={this.updateTaskValue.bind(this)} />);
-            }
+            return stateTasks;
         }
         else if (filter === 'Completed') {
-            for (let i in stateTasks) {
-                if (stateTasks[i].completed === true) {
-                    tasks.push(<Task key={i} id={i} value={stateTasks[i].value} completed={stateTasks[i].completed} removeTask={this.removeTask.bind(this)} completeTask={this.completeTask.bind(this)} updateTaskValue={this.updateTaskValue.bind(this)} />);
-                }
-            }
+            return stateTasks.filter((task) => task.completed);
         }
         else if (filter === 'Active') {
-            for (let i in stateTasks) {
-                if (stateTasks[i].completed === false) {
-                    tasks.push(<Task key={i} id={i} value={stateTasks[i].value} completed={stateTasks[i].completed} removeTask={this.removeTask.bind(this)} completeTask={this.completeTask.bind(this)} updateTaskValue={this.updateTaskValue.bind(this)} />);
-                }
-            }
+            return stateTasks.filter((task) => !task.completed);
         }
-
-        return {
-            tasks: tasks,
-            count: stateTasks.length
-        };
     }
 
     render() {
         // Setup tasks for rendering...
-        const get = this.getFIltratedTasks();
-        let tasks = get.tasks;
+        const tasks = this.getFIltratedTasks();
+        const count = this.state.tasks.length;
 
         return (
             <article className="container">
                 <center>
                     <h1>TODO LIST</h1>
                     <TaskForm onSubmit={this.createNewTask.bind(this)} />
-                    {tasks}
-                    {(get.count !== 0) ? <Controller count={get.count} completedCount={this.getCompletedsCount()} filtrate={this.filtrateTasks.bind(this)} removeCompleteds={this.removeCompleteds.bind(this)} /> : ''}
+                    {tasks.map((task, i) => (
+                        <Task
+                            key={i}
+                            id={i}
+                            value={task.value}
+                            completed={task.completed}
+                            removeTask={this.removeTask.bind(this)}
+                            completeTask={this.completeTask.bind(this)}
+                            updateTaskValue={this.updateTaskValue.bind(this)}
+                        />
+                    ))}
+                    {(count !== 0) && (
+                        <Controller
+                            count={count}
+                            completedCount={this.getCompletedsCount()}
+                            filtrate={this.filtrateTasks.bind(this)}
+                            removeCompleteds={this.removeCompleteds.bind(this)}
+                        />
+                    )}
                 </center>
             </article>
         )

@@ -22,10 +22,6 @@ class Controller extends React.Component {
                 count: this.props.count,
                 completedCount: this.props.completedCount
             });
-            return true;
-        }
-        else {
-            return false;
         }
     }
 
@@ -42,7 +38,7 @@ class Controller extends React.Component {
                     <button className="btn btn-warning" onClick={() => {this.props.filtrate('All')}}>All</button>
                     <button className="btn btn-success" onClick={() => {this.props.filtrate('Completed')}}>Completed</button>
                     <button className="btn btn-danger" onClick={() => {this.props.filtrate('Active')}}>Active</button>
-                    {(this.state.completedCount !== 0) ? <button className="btn" onClick={() => {this.props.removeCompleteds()}}>Clear All Completeds</button> : ''}
+                    {(this.state.completedCount !== 0) && <button className="btn" onClick={() => {this.props.removeCompleteds()}}>Clear All Completeds</button>}
                 </div>
             </article>
         );

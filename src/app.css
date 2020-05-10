@@ -63,7 +63,7 @@ form {
 }
 
 /* Completed Task */
-article[type='completedTask'] input{
+article.completedTask input{
     text-decoration-line: line-through;
 }
 
