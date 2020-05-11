@@ -1,115 +1,99 @@
-import React from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import TaskForm from './TaskForm';
 import Task from './Task';
 import Controller from './Controller';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tasks: [],
-            filter: 'All'
-        };
-    }
+function App(props) {
+    const [tasks, setTasks] = useState([]);
+    const [filter, setFilter] = useState('All');
 
-    componentDidMount() {
+    useEffect(() => {
         if (localStorage.getItem('tasks') !== null) {
-            this.setState({
-                tasks: JSON.parse(localStorage.getItem('tasks'))
-            });
+            setTasks([...JSON.parse(localStorage.getItem('tasks'))]);
         }
         else {
             localStorage.setItem('tasks', JSON.stringify('[]'));
         }
-    }
+    }, [props]);
 
-    // Save tasks to localStorage
-    saveToStorage() {
-        localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+    // Save tasks to storage
+    function saveToStorage() {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
     // Create new task
-    createNewTask(value) {
+    function createNewTask(value) {
         if (value !== '') {
-            let state = this.state.tasks;
+            let state = tasks;
             state.push({
                 value: value,
                 completed: false
             });
 
-            this.setState({
-                tasks: state
-            });
+            setTasks([...state]);
 
-            this.saveToStorage();
+            saveToStorage();
         }
     }
 
     // Remove task by button click
-    removeTask(id) {
-        let stateTasks = this.state.tasks;
+    function removeTask(id) {
+        let stateTasks = tasks;
         stateTasks.splice(id, 1);
-        this.setState({
-            tasks: stateTasks
-        });
-        this.saveToStorage();
+
+        setTasks([...stateTasks]);
+        saveToStorage();
     }
 
     // Remove all completed tasks
-    removeCompleteds() {
-        let tasks = this.state.tasks;
+    function removeCompleteds() {
+        let stateTask = tasks;
         let arr = [];
 
-        for (let i in tasks) {
-            if (tasks[i].completed !== true) {
-                arr.push(tasks[i]);
+        for (let i in stateTask) {
+            if (stateTask[i].completed !== true) {
+                arr.push(stateTask[i]);
             }
         }
-        this.setState({
-            tasks: arr
-        });
+        setTasks([...arr]);
 
         localStorage.setItem('tasks', JSON.stringify(arr));
     }
 
     // Complete task by button Click
-    completeTask(id) {
-        let stateTasks = this.state.tasks;
+    function completeTask(id) {
+        let stateTasks = tasks;
         stateTasks[id].completed = !stateTasks[id].completed;
 
-        this.setState({
-            tasks: stateTasks
-        });
-        this.saveToStorage();
+        setTasks([...stateTasks]);
+        saveToStorage();
     }
 
     // Change task value 
-    updateTaskValue(id, input) {
+    function updateTaskValue(id, input) {
         const value = input.value;
-        let stateTasks = this.state.tasks;
+        let stateTasks = tasks;
 
         stateTasks[id].value = value;
 
-        this.setState({
-            tasks: stateTasks
-        })
+        setTasks([...stateTasks]);
 
         if (value === '') {
             setTimeout(() => {
                 if (input.value === '') {
-                    this.removeTask(id);
+                    removeTask(id);
                 }
             }, 1000);
         }
 
-        this.saveToStorage();
+        saveToStorage();
     }
 
     // Get completeds task count 
-    getCompletedsCount() {
+    function getCompletedsCount() {
         let count = 0;
-        for (let i in this.state.tasks) {
-            if (this.state.tasks[i].completed) {
+        for (let i in tasks) {
+            if (tasks[i].completed) {
                 count++;
             }
         }
@@ -117,61 +101,55 @@ class App extends React.Component {
     }
 
     // Filtrates tasks 
-    filtrateTasks(btnFilter) {
-        this.setState({
-            filter: btnFilter
-        });
+    function filtrateTasks(btnFilter) {
+        setFilter(btnFilter);
     }
 
     // Get Tasks after filtrate
-    getFIltratedTasks() {
-        const stateTasks = this.state.tasks;
-        const filter = this.state.filter;
-
+    function getFIltratedTasks() {
         if (filter === 'All') {
-            return stateTasks;
+            return tasks;
         }
         else if (filter === 'Completed') {
-            return stateTasks.filter((task) => task.completed);
+            return tasks.filter((task) => task.completed);
         }
         else if (filter === 'Active') {
-            return stateTasks.filter((task) => !task.completed);
+            return tasks.filter((task) => !task.completed);
         }
     }
 
-    render() {
-        // Setup tasks for rendering...
-        const tasks = this.getFIltratedTasks();
-        const count = this.state.tasks.length;
+    // Setup tasks for rendering
+    const filtratedTasks = getFIltratedTasks();
+    const count = tasks.length;
 
-        return (
-            <article className="container">
-                <center>
-                    <h1>TODO LIST</h1>
-                    <TaskForm onSubmit={this.createNewTask.bind(this)} />
-                    {tasks.map((task, i) => (
-                        <Task
-                            key={i}
-                            id={i}
-                            value={task.value}
-                            completed={task.completed}
-                            removeTask={this.removeTask.bind(this)}
-                            completeTask={this.completeTask.bind(this)}
-                            updateTaskValue={this.updateTaskValue.bind(this)}
-                        />
-                    ))}
-                    {(count !== 0) && (
-                        <Controller
-                            count={count}
-                            completedCount={this.getCompletedsCount()}
-                            filtrate={this.filtrateTasks.bind(this)}
-                            removeCompleteds={this.removeCompleteds.bind(this)}
-                        />
-                    )}
-                </center>
-            </article>
-        )
-    }
+    return (
+        <article className="container">
+            <center>
+                <h1>TODO LIST</h1>
+                <TaskForm onSubmit={createNewTask} />
+                {filtratedTasks.map((task, i) => (
+                    <Task
+                        key={i}
+                        id={i}
+                        value={task.value}
+                        completed={task.completed}
+                        removeTask={removeTask}
+                        completeTask={completeTask}
+                        updateTaskValue={updateTaskValue}
+                    />
+                ))}
+                {(count !== 0) && (
+                    <Controller
+                        count={count}
+                        completedCount={getCompletedsCount}
+                        filtrate={filtrateTasks}
+                        removeCompleteds={removeCompleteds}
+                    />
+                )}
+            </center>
+        </article>
+    );
 }
+
 
 export default App;
